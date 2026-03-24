@@ -8,19 +8,19 @@ import {
   ThemeProvider,
   Typography,
   createTheme,
-} from '@mui/material';
-import { useState, type ChangeEvent } from 'react';
-import AccessibilityReport from './components/AccessibilityReport';
-import SignatureForm from './components/SignatureForm';
-import SignaturePreview from './components/SignaturePreview';
-import { initialFormData, type SignatureFormData } from './types/signature';
+} from "@mui/material";
+import { useState, type ChangeEvent } from "react";
+import AccessibilityReport from "./components/AccessibilityReport";
+import SignatureForm from "./components/SignatureForm";
+import SignaturePreview from "./components/SignaturePreview";
+import { initialFormData, type SignatureFormData } from "./types/signature";
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: "light",
   },
   typography: {
-    fontFamily: 'Arial, Helvetica, sans-serif',
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
 });
 
@@ -77,6 +77,13 @@ function App() {
               <Paper sx={{ p: 3 }} elevation={2}>
                 <Typography variant="h5" component="h2" gutterBottom>
                   Preview
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
+                  Live preview of the current signature layout.
                 </Typography>
                 <SignaturePreview formData={formData} />
               </Paper>
