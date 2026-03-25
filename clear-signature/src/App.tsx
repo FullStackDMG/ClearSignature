@@ -1,10 +1,13 @@
 import {
   Box,
+  Button,
   Container,
   CssBaseline,
+  FormControlLabel,
   Grid,
   Paper,
   Stack,
+  Switch,
   ThemeProvider,
   Typography,
   createTheme,
@@ -26,7 +29,7 @@ const theme = createTheme({
 
 function App() {
   const [formData, setFormData] = useState<SignatureFormData>(initialFormData);
-
+  const [darkPreview, setDarkPreview] = useState(false);
   const handleTextChange =
     (field: keyof SignatureFormData) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -45,18 +48,42 @@ function App() {
       }));
     };
 
+  const handleClearAll = () => {
+    setFormData(initialFormData);
+    setDarkPreview(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Stack spacing={3}>
-          <Box component="header">
-            <Typography variant="h3" component="h1" gutterBottom>
-              ClearSignature
-            </Typography>
-            <Typography variant="h6" color="text.secondary">
-              Clear signatures. Accessible by design.
-            </Typography>
+          <Box
+            component="header"
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              gap: 2,
+              flexWrap: "wrap",
+            }}
+          >
+            <Box>
+              <Typography variant="h3" component="h1" gutterBottom>
+                ClearSignature
+              </Typography>
+              <Typography variant="h6" color="text.secondary">
+                Clear signatures. Accessible by design.
+              </Typography>
+            </Box>
+
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleClearAll}
+            >
+              Reset
+            </Button>
           </Box>
 
           <Grid container spacing={3}>
@@ -78,14 +105,40 @@ function App() {
                 <Typography variant="h5" component="h2" gutterBottom>
                   Preview
                 </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
                   sx={{ mb: 2 }}
                 >
-                  Live preview of the current signature layout.
+                  <Typography variant="body2" color="text.secondary">
+                    Live preview of the current signature layout.
+                  </Typography>
+
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={darkPreview}
+                        onChange={(event) =>
+                          setDarkPreview(event.target.checked)
+                        }
+                        inputProps={{
+                          "aria-label": "Toggle dark mode preview",
+                        }}
+                      />
+                    }
+                    label="Dark mode preview"
+                  />
+                </Stack>
+                <SignaturePreview formData={formData} darkMode={darkPreview} />
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mt: 2, display: "block" }}
+                >
+                  Preview simulates common dark mode behavior. Some email
+                  clients may override colors differently.
                 </Typography>
-                <SignaturePreview formData={formData} />
               </Paper>
             </Grid>
           </Grid>

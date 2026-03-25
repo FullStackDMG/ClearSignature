@@ -1,8 +1,9 @@
-import { Box, Divider, Stack, Typography } from '@mui/material';
-import type { SignatureFormData } from '../types/signature';
+import { Box, Divider, Stack, Typography } from "@mui/material";
+import type { SignatureFormData } from "../types/signature";
 
 type SignaturePreviewProps = {
   formData: SignatureFormData;
+  darkMode?: boolean;
 };
 
 type LinkItem = {
@@ -13,25 +14,27 @@ type LinkItem = {
 function PlaceholderBox({
   label,
   altText,
+  darkMode = false,
 }: {
   label: string;
   altText?: string;
+  darkMode?: boolean;
 }) {
   return (
     <Box
       sx={{
         width: 72,
         height: 72,
-        border: '1px solid',
-        borderColor: 'divider',
+        border: "1px solid",
+        borderColor: darkMode ? "rgba(255, 255, 255, 0.24)" : "divider",
         borderRadius: 1,
-        display: 'grid',
-        placeItems: 'center',
-        textAlign: 'center',
+        display: "grid",
+        placeItems: "center",
+        textAlign: "center",
         px: 1,
-        fontSize: '0.75rem',
-        color: 'text.secondary',
-        backgroundColor: '#fafafa',
+        fontSize: "0.75rem",
+        color: darkMode ? "#a0a0a0" : "text.secondary",
+        backgroundColor: darkMode ? "#2d2d2d" : "#fafafa",
         flexShrink: 0,
       }}
       aria-label={altText || `${label} placeholder`}
@@ -53,20 +56,14 @@ function InlineItems({
   }
 
   return (
-    <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
-      {fallbackLabel ? `${fallbackLabel}: ` : ''}
-      {items.join(' | ')}
+    <Typography variant="body2" sx={{ wordBreak: "break-word" }}>
+      {fallbackLabel ? `${fallbackLabel}: ` : ""}
+      {items.join(" | ")}
     </Typography>
   );
 }
 
-function LinkList({
-  heading,
-  items,
-}: {
-  heading: string;
-  items: LinkItem[];
-}) {
+function LinkList({ heading, items }: { heading: string; items: LinkItem[] }) {
   if (items.length === 0) {
     return null;
   }
@@ -81,16 +78,19 @@ function LinkList({
         <Typography
           key={`${heading}-${item.label}-${item.url}-${index}`}
           variant="body2"
-          sx={{ wordBreak: 'break-word' }}
+          sx={{ wordBreak: "break-word" }}
         >
-          {item.label || heading.slice(0, -1)}: {item.url || 'URL pending'}
+          {item.label || heading.slice(0, -1)}: {item.url || "URL pending"}
         </Typography>
       ))}
     </Box>
   );
 }
 
-function SignaturePreview({ formData }: SignaturePreviewProps) {
+function SignaturePreview({
+  formData,
+  darkMode = false,
+}: SignaturePreviewProps) {
   const phones = [
     formData.phone1,
     formData.phone2,
@@ -132,10 +132,10 @@ function SignaturePreview({ formData }: SignaturePreviewProps) {
         p: 2.5,
         borderLeft: `4px solid ${formData.accentColor}`,
         fontFamily: formData.fontFamily,
-        color: formData.textColor,
-        bgcolor: '#ffffff',
+        color: darkMode ? "#f5f5f5" : formData.textColor,
+        bgcolor: darkMode ? "#1e1e1e" : "#ffffff",
         borderRadius: 1,
-        boxShadow: '0 1px 2px rgba(16, 24, 40, 0.06)',
+        boxShadow: "0 1px 2px rgba(16, 24, 40, 0.06)",
       }}
     >
       <Stack spacing={2}>
@@ -143,6 +143,7 @@ function SignaturePreview({ formData }: SignaturePreviewProps) {
           <PlaceholderBox
             label="Headshot"
             altText={formData.headshotAltText}
+            darkMode={darkMode}
           />
 
           <Box sx={{ minWidth: 0 }}>
@@ -151,10 +152,10 @@ function SignaturePreview({ formData }: SignaturePreviewProps) {
               sx={{
                 fontWeight: 700,
                 lineHeight: 1.2,
-                wordBreak: 'break-word',
+                wordBreak: "break-word",
               }}
             >
-              {formData.preferredName || 'Preferred Name'}
+              {formData.preferredName || "Preferred Name"}
             </Typography>
 
             {formData.pronouns && (
@@ -178,10 +179,11 @@ function SignaturePreview({ formData }: SignaturePreviewProps) {
                 <PlaceholderBox
                   label="Company Logo"
                   altText={formData.companyLogoAltText}
+                  darkMode={darkMode}
                 />
                 <Typography
                   variant="body2"
-                  sx={{ fontWeight: 600, wordBreak: 'break-word' }}
+                  sx={{ fontWeight: 600, wordBreak: "break-word" }}
                 >
                   {formData.companyName}
                 </Typography>
@@ -193,10 +195,11 @@ function SignaturePreview({ formData }: SignaturePreviewProps) {
                 <PlaceholderBox
                   label="Dept. Logo"
                   altText={formData.departmentLogoAltText}
+                  darkMode={darkMode}
                 />
                 <Typography
                   variant="body2"
-                  sx={{ fontWeight: 500, wordBreak: 'break-word' }}
+                  sx={{ fontWeight: 500, wordBreak: "break-word" }}
                 >
                   {formData.departmentName}
                 </Typography>
@@ -230,7 +233,7 @@ function SignaturePreview({ formData }: SignaturePreviewProps) {
             <Divider />
             <Typography
               variant="body2"
-              sx={{ fontSize: '0.8125rem', wordBreak: 'break-word' }}
+              sx={{ fontSize: "0.8125rem", wordBreak: "break-word" }}
             >
               {formData.disclosure}
             </Typography>
@@ -243,12 +246,13 @@ function SignaturePreview({ formData }: SignaturePreviewProps) {
               p: 1.5,
               borderRadius: 1,
               backgroundColor: formData.accentColor,
-              color: '#ffffff',
+              color: "#ffffff",
+              border: darkMode ? "1px solid rgba(255,255,255,0.12)" : "none",
             }}
           >
             <Typography
               variant="body2"
-              sx={{ fontWeight: 700, wordBreak: 'break-word' }}
+              sx={{ fontWeight: 700, wordBreak: "break-word" }}
             >
               {formData.ctaText}
             </Typography>
