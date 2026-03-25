@@ -41,10 +41,10 @@ function AccessibilityReport({ formData }: AccessibilityReportProps) {
     <Box>
       {issues.length > 0 && (
         <Box sx={{ mb: warnings.length > 0 ? 2 : 0 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          <Typography variant="subtitle1" color="text.secondary" sx={{ fontWeight: 700 }}>
             Needs review
           </Typography>
-          <Box component="ul" sx={{ pl: 3, mb: 0 }}>
+          <Box component="ul" sx={{ pl: 3, mb: 0 }} color="text.secondary">
             {issues.map((issue) => (
               <li key={issue}>
                 <Typography component="span">{issue}</Typography>
@@ -56,7 +56,7 @@ function AccessibilityReport({ formData }: AccessibilityReportProps) {
 
       {warnings.length > 0 && (
         <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          <Typography variant="subtitle1" color="text.secondary" sx={{ fontWeight: 700 }}>
             Warnings
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 0 }}>

@@ -98,8 +98,8 @@ export const initialFormData: SignatureFormData = {
   ctaText: '',
 
   fontFamily: 'Arial, Helvetica, sans-serif',
-  textColor: '#111111',
-  accentColor: '#005ea2',
+  textColor: '#24313A',
+  accentColor: '#425664',
 
   headshotAltText: '',
   companyLogoAltText: '',

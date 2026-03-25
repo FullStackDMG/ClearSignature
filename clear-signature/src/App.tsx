@@ -10,25 +10,17 @@ import {
   Switch,
   ThemeProvider,
   Typography,
-  createTheme,
 } from "@mui/material";
 import { useState, type ChangeEvent } from "react";
 import AccessibilityReport from "./components/AccessibilityReport";
 import SignatureForm from "./components/SignatureForm";
 import SignaturePreview from "./components/SignaturePreview";
+import { darkTheme, lightTheme } from "./styles/theme";
 import { initialFormData, type SignatureFormData } from "./types/signature";
-
-const theme = createTheme({
-  palette: {
-    mode: "light",
-  },
-  typography: {
-    fontFamily: "Arial, Helvetica, sans-serif",
-  },
-});
 
 function App() {
   const [formData, setFormData] = useState<SignatureFormData>(initialFormData);
+  const [darkAppTheme, setDarkAppTheme] = useState(false);
   const [darkPreview, setDarkPreview] = useState(false);
   const handleTextChange =
     (field: keyof SignatureFormData) =>
@@ -54,7 +46,7 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkAppTheme ? darkTheme : lightTheme}>
       <CssBaseline />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Stack spacing={3}>
@@ -69,7 +61,7 @@ function App() {
             }}
           >
             <Box>
-              <Typography variant="h3" component="h1" gutterBottom>
+              <Typography variant="h3" component="h1" gutterBottom color="primary.main">
                 ClearSignature
               </Typography>
               <Typography variant="h6" color="text.secondary">
@@ -77,13 +69,31 @@ function App() {
               </Typography>
             </Box>
 
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={handleClearAll}
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              flexWrap="wrap"
             >
-              Reset
-            </Button>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={darkAppTheme}
+                    onChange={(event) => setDarkAppTheme(event.target.checked)}
+                    inputProps={{ "aria-label": "Toggle app theme" }}
+                  />
+                }
+                label="Dark app theme"
+              />
+
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleClearAll}
+              >
+                Reset
+              </Button>
+            </Stack>
           </Box>
 
           <Grid container spacing={3}>
