@@ -19,6 +19,7 @@ import SignatureForm from "./components/SignatureForm";
 import SignaturePreview from "./components/SignaturePreview";
 import { darkTheme, lightTheme } from "./styles/theme";
 import { initialFormData, type SignatureFormData } from "./types/signature";
+import { copyHtmlToClipboard } from "./utils/copyHtmlToClipboard";
 import { downloadFile } from "./utils/downloadFile";
 import { generateHtmlSignature } from "./utils/exportHtml";
 import { generatePlainTextSignature } from "./utils/exportPlainText";
@@ -29,6 +30,9 @@ function App() {
   const [darkPreview, setDarkPreview] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success",
+  );
 
   const handleTextChange =
     (field: keyof SignatureFormData) =>
@@ -57,9 +61,11 @@ function App() {
     try {
       const text = generatePlainTextSignature(formData);
       await navigator.clipboard.writeText(text);
+      setSnackbarSeverity("success");
       setSnackbarMessage("Plain text signature copied to clipboard.");
       setSnackbarOpen(true);
     } catch {
+      setSnackbarSeverity("error");
       setSnackbarMessage("Clipboard copy failed.");
       setSnackbarOpen(true);
     }
@@ -72,8 +78,26 @@ function App() {
   const handleExportHtml = () => {
     const html = generateHtmlSignature(formData);
     downloadFile("clear-signature.html", html, "text/html;charset=utf-8");
+    setSnackbarSeverity("success");
     setSnackbarMessage("HTML signature downloaded.");
     setSnackbarOpen(true);
+  };
+
+  const handleCopyHtml = async () => {
+    try {
+      const html = generateHtmlSignature(formData);
+      const plainText = generatePlainTextSignature(formData);
+
+      await copyHtmlToClipboard(html, plainText);
+
+      setSnackbarSeverity("success");
+      setSnackbarMessage("HTML signature copied to clipboard.");
+      setSnackbarOpen(true);
+    } catch {
+      setSnackbarSeverity("error");
+      setSnackbarMessage("HTML clipboard copy failed.");
+      setSnackbarOpen(true);
+    }
   };
 
   return (
@@ -195,7 +219,7 @@ function App() {
                     color="primary"
                     onClick={handleExportPlainText}
                   >
-                    Copy Plain Text Signature
+                    Copy Plain Text
                   </Button>
 
                   <Button
@@ -203,7 +227,15 @@ function App() {
                     color="secondary"
                     onClick={handleExportHtml}
                   >
-                    Download HTML Signature
+                    Download HTML
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleCopyHtml}
+                  >
+                    Copy HTML
                   </Button>
                 </Stack>
               </Paper>
@@ -226,7 +258,7 @@ function App() {
       >
         <Alert
           onClose={handleSnackbarClose}
-          severity="success"
+          severity={snackbarSeverity}
           variant="filled"
           sx={{ width: "100%" }}
         >
